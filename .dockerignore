@@ -1,0 +1,18 @@
+# Docker ignore file to reduce build context
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.venv/
+venv/
+ENV/
+env/
+*.egg-info/
+.git/
+.gitignore
+README.md
+.vscode/
+.idea/
+*.swp
+.DS_Store
+uv.lock

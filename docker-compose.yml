@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  onkyo-api:
+    build: .
+    container_name: onkyo-api
+    ports:
+      - "8000:8000"
+    network_mode: host
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+      - DEBUG=false
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')",
+        ]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s

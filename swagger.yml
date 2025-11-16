@@ -1,32 +1,74 @@
-swagger: "2.0"
+openapi: "3.0.0"
 info:
-  description: RESTfull API for Onkyo EISCP protocol
+  description: RESTful API for Onkyo EISCP protocol
   version: "1.0.0"
   title: Onkyo API
-consumes:
-  - "application/json"
-produces:
-  - "application/text"
 
-basePath: "/api/v1"
+servers:
+  - url: /api/v1
+    description: API v1
 
-# Paths supported by the server application
 paths:
   /onkyo/{command}:
     get:
       operationId: onkyo.runCommand
       tags:
         - onkyo
-      summary: runs a command
-      description: runs a command on reciever
+      summary: Runs a command
+      description: Runs a command on receiver
       parameters:
         - name: command
           in: path
-          description: command string
-          type: string
-          required: True
-      responses:
-        200:
-          description: Successfully command execution
+          description: Command string to send to the receiver
+          required: true
           schema:
-            type: string           
+            type: string
+        - name: host
+          in: query
+          description: Receiver hostname or IP address
+          required: false
+          schema:
+            type: string
+        - name: port
+          in: query
+          description: Receiver port (default 60128)
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successfully executed command
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                properties:
+                  success:
+                    type: boolean
+                    description: Whether the command executed successfully
+                  receiver:
+                    type: string
+                    description: Receiver model name (only for parsed query responses)
+                  command:
+                    type: string
+                    description: Command name (only for parsed query responses)
+                  value:
+                    type: string
+                    description: Command value (only for parsed query responses)
+                  raw:
+                    type: string
+                    description: Raw output from the receiver
+                  error:
+                    type: string
+                    description: Error message (only present on failure)
+                  exit_code:
+                    type: integer
+                    description: Exit code (only present on failure)
+                  stdout:
+                    type: string
+                    description: Standard output (only present on failure with output)
+                  stderr:
+                    type: string
+                    description: Standard error (only present on failure with output)
